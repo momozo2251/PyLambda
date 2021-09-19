@@ -1,5 +1,5 @@
 from selenium import webdriver
-
+import boto3
 
 def lambda_handler(event, context):
     options = webdriver.ChromeOptions()
@@ -21,10 +21,28 @@ def lambda_handler(event, context):
     options.add_argument("--ignore-certificate-errors")
     options.add_argument("--homedir=/tmp")
 
+    # set driver and url
     driver = webdriver.Chrome(
         "./bin/chromedriver",
         chrome_options=options)
-    driver.get("https://www.google.co.jp")
+    url = 'https://www.google.com/search?q=%E8%AA%BF%E5%B8%83+%E5%A4%A9%E6%B0%97&rlz=1C5CHFA_enJP928JP928&oq=%E8%AA%BF%E5%B8%83%E3%80%80%E5%A4%A9%E6%B0%97'
+    driver.get(url)
     title = driver.title
+
+    # get width and height of the page
+    w = driver.execute_script("return document.body.scrollWidth;")
+    h = driver.execute_script("return document.body.scrollHeight;")
+    # set window size
+    driver.set_window_size(w,h)
+    # Get Screen Shot
+    weather_capture = driver.save_screenshot('/tmp/weather.png')
     driver.close()
+
+    # s3
+    s3 = boto3.client('s3')
+    bucket = 'weather-capture'
+    s3.upload_file(Filename="/tmp/weather.png",
+                   Bucket=bucket,
+                   Key="weather.png")
+
     return title
