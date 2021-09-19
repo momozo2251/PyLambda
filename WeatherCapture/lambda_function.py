@@ -31,9 +31,9 @@ def lambda_handler(event, context):
 
     # get width and height of the page
     w = driver.execute_script("return document.body.scrollWidth;")
-    h = driver.execute_script("return document.body.scrollHeight;")
+    #h = driver.execute_script("return document.body.scrollHeight;")
     # set window size
-    driver.set_window_size(w,h)
+    driver.set_window_size(w,600)
     # Get Screen Shot
     weather_capture = driver.save_screenshot('/tmp/weather.png')
     driver.close()
