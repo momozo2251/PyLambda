@@ -25,7 +25,7 @@ def lambda_handler(event, context):
     driver = webdriver.Chrome(
         "./bin/chromedriver",
         chrome_options=options)
-    url = 'https://www.google.com/search?q=%E8%AA%BF%E5%B8%83+%E5%A4%A9%E6%B0%97&rlz=1C5CHFA_enJP928JP928&oq=%E8%AA%BF%E5%B8%83%E3%80%80%E5%A4%A9%E6%B0%97'
+    url = 'https://www.google.com/search?q=%E8%AA%BF%E5%B8%83+%E5%A4%A9%E6%B0%97'
     driver.get(url)
     title = driver.title
 
