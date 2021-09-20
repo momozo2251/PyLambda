@@ -1,0 +1,14 @@
+import requests
+import boto3
+import base64
+
+def lambda_handler(event, context):
+    s3 = boto3.client('s3')
+    bucket = 'weather-capture'
+    file_path = 'weather.png'
+    response = s3.get_object(Bucket=bucket, Key=file_path)
+    image_data = response['Body'].read()
+    files = {'file': image_data}
+    param = {'token': ${MY_LAMBDA_SLACK_TOKEN}, 'channels': '${MY_LAMBDA_SLACK_CHANNELL_ID}', 'initial_comment': '<@${MY_LAMBDA_SLACK_MEMBER_ID}>'}
+    res = requests.post(url="https://slack.com/api/files.upload",params=param, files=files)
+    return res.text
